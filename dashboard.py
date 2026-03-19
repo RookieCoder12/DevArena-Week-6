@@ -20,38 +20,37 @@ df_category_sales = df.groupby(["Month", "Category"]).agg(
     no_orders = ("Order ID", "nunique")
 )
 categories = df["Category"].unique().tolist()
-# print(categories)
+
+# State Sales
+df_state_sales = df.groupby(["ship-state", "Category"]).agg(
+    revenue = ("Amount", "sum")
+)
+
 
 app = Dash()
 
 app.layout = html.Div([
     #--- Title & Data
     html.Div([
-        html.H1("This is where it starts")
+        html.H1("Amazon Sales Dashboard")
     ], style={"textAlign": "center"}) ,
-    
-    dag.AgGrid(
-        rowData=df.to_dict('records'),
-        columnDefs=[{"field": i} for i in df.columns]
-    ),
 
     #--- Monthly Sales
     html.Div([
         html.Div([
-            dag.AgGrid(
-                rowData=df_monthly_sales.to_dict('records'),
-                columnDefs=[{"field": i} for i in df_monthly_sales.columns]
-            )
-        ], style={"width": "33%", "display": "inline-block"}),
-
-        html.Div([
             dcc.Graph(figure=fig_monthly_sales_line)
-        ], style={"width": "35%", "display": "inline-block"}) ,
+        ], style={"width": "50%"
+                  , "display": "inline-block"
+                  } ) ,
 
         html.Div([
             dcc.Graph(figure=fig_monthly_orders_line)
-        ], style={"width": "33%", "display": "inline-block"})
-    ], style={"display": "flex"}) ,
+        ], style={"width": "50%", "display": "inline-block"})
+    ], style={"display": "flex" 
+              , "alignItems": "center" 
+              , "width": "90%" 
+              , "margin": "0 auto"
+              } ) ,
 
     #--- Category Sales
     html.Div([
@@ -60,18 +59,28 @@ app.layout = html.Div([
                            value = categories[0] ,
                            inline = False ,
                            id = 'category_radio_button')
-        ], style={"width": "33%", "display": "inline-block"}),
+        ], style={"width": "5%", "display": "inline-block"}),
 
         html.Div([
             dcc.Graph(id='category_line_chart_monthlyRev')
-        ], style={"width": "35%", "display": "inline-block"}) ,
+        ], style={"width": "47%", "display": "inline-block"}) ,
 
         html.Div([
             dcc.Graph(id='category_line_chart_monthlyOrders')
-        ], style={"width": "33%", "display": "inline-block"})
-    ], style={"display": "flex"})
+        ], style={"width": "47%", "display": "inline-block"})
+    ], style={"display": "flex" 
+              , "alignItems": "center" 
+              , "width": "90%" 
+              , "margin": "0 auto"
+              } ) ,
 
-    
+    #--- State Sales
+    html.Div([
+        dcc.Graph(id='state_sales_bar_chart')
+    ], style={"alignItems": "center" 
+              , "width": "90%" 
+              , "margin": "0 auto"
+              } )
 ])
 
 # 'category_line_chart_monthlyRev'
@@ -108,6 +117,21 @@ def category_chart_noOrders(selected_category):
                    title= f"{selected_category.title()} - Monthly Orders Trend")
 
     return fig
-    
+
+# 'state_sales_bar_chart'
+@callback(
+    Output('state_sales_bar_chart', 'figure') ,
+    Input('category_radio_button', 'value')
+)
+def category_chart_noOrders(selected_category):
+    df_filtered_state = df_state_sales.xs(selected_category, level="Category").reset_index().head(10).sort_values(by="revenue", ascending=False)
+    # Create a line plot object
+    fig = pex.bar(data_frame= df_filtered_state, 
+                   x="ship-state" ,
+                   y="revenue" ,
+                   title= f"Top State Sales")
+
+    return fig
+
 if __name__ == '__main__':
     app.run(debug=True)
