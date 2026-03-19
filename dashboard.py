@@ -124,7 +124,7 @@ def category_chart_noOrders(selected_category):
     Input('category_radio_button', 'value')
 )
 def category_chart_noOrders(selected_category):
-    df_filtered_state = df_state_sales.xs(selected_category, level="Category").reset_index().head(10).sort_values(by="revenue", ascending=False)
+    df_filtered_state = df_state_sales.xs(selected_category, level="Category").reset_index().head(15).sort_values(by="revenue", ascending=False)
     # Create a line plot object
     fig = pex.bar(data_frame= df_filtered_state, 
                    x="ship-state" ,
