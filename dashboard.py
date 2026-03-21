@@ -3,9 +3,10 @@ import dash_ag_grid as dag
 import pandas as pd 
 import plotly.express as pex
 
+#--- Completed Sales 
 df = pd.read_csv(r"/Users/developer/Documents/Current Project/Python/DevArena /DevArena-Week-6/data/amazon_final.csv")
 
-# Monthly Sales
+#--- Monthly Sales
 df_monthly_sales = df.groupby("Month").agg(
     monthly_revenue = ("Amount", "sum"), 
     no_orders = ("Order ID", "nunique")
@@ -14,18 +15,28 @@ df_monthly_sales = df.groupby("Month").agg(
 fig_monthly_sales_line = pex.line(df_monthly_sales, x="Month", y="monthly_revenue", title="Monthly Revenue", markers=True)
 fig_monthly_orders_line = pex.line(df_monthly_sales, x="Month", y="no_orders", title="Monthly Orders", markers=True)
 
-# Category Sales
+#--- Category Sales
 df_category_sales = df.groupby(["Month", "Category"]).agg(
     monthly_revenue = ("Amount", "sum"), 
     no_orders = ("Order ID", "nunique")
 )
 categories = df["Category"].unique().tolist()
 
-# State Sales
+#--- State Sales
 df_state_sales = df.groupby(["ship-state", "Category"]).agg(
     revenue = ("Amount", "sum")
 )
 
+#--- Not Completed Sales
+not_df = pd.read_csv(r"/Users/developer/Documents/Current Project/Python/DevArena /DevArena-Week-6/data/notamazon_final.csv")
+
+not_df_aggregated = not_df.groupby("Status").agg(
+    no_orders = ("Order ID", "nunique")
+).reset_index()
+#--- Creating a bar graph objects
+fig_monthly_orders_not_completed = pex.bar(data_frame=not_df_aggregated
+                  , x="Status"
+                  , y="no_orders")
 
 app = Dash()
 
@@ -77,6 +88,14 @@ app.layout = html.Div([
     #--- State Sales
     html.Div([
         dcc.Graph(id='state_sales_bar_chart')
+    ], style={"alignItems": "center" 
+              , "width": "90%" 
+              , "margin": "0 auto"
+              } ) ,
+
+    #--- Cancelled Orders
+    html.Div([
+        dcc.Graph(figure=fig_monthly_orders_not_completed)
     ], style={"alignItems": "center" 
               , "width": "90%" 
               , "margin": "0 auto"
