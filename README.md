@@ -1,10 +1,10 @@
 # DevArena-Week-6
 
 ## Overview
-This project develops an interactive sales **analytics dashboard using Python** and the **Dash framework** to **analyze Amazon sales data**. The primary objective is to explore **revenue trends**, **order patterns**, and **regional performance**, while also examining **incomplete or cancelled orders** to provide a comprehensive view of business operations.
+This project develops an interactive sales **analytics dashboard using Python** and the **Dash framework** to **analyze Amazon sales data**. The primary objective is to explore **revenue trends**, **order patterns**, and **regional performance**, while also examining **incomplete or cancelled orders** to provide a comprehensive view of business operations.<br>
 During the preprocessing stage, the datasets were cleaned and prepared for analysis. Monthly trends for sales, number of orders, and quantity sold were examined to understand overall business performance. In addition, product category sales trends and regional performance were analyzed to identify fluctuations in revenue.
-The dashboard incorporates multiple interactive visualizations built with **Plotly**. These include monthly revenue and order trend line charts, category-wise performance analysis using dynamic filters, and state-level revenue comparisons through bar charts. A **radio button selector** allows users to **interactively explore different product categories, updating the visualizations in real time**.
-The project also analyzes non-completed orders by examining order statuses and visualizing their distribution, helping identify operational inefficiencies or fulfillment issues.
+The dashboard incorporates multiple interactive visualizations built with **Plotly**. These include monthly revenue and order trend line charts, category-wise performance analysis using dynamic filters, and state-level revenue comparisons through bar charts. A **radio button selector** allows users to **interactively explore different product categories, updating the visualizations in real time**.<br>
+The project also analyzes non-completed orders by examining order statuses and visualizing their distribution, helping identify operational inefficiencies or fulfillment issues.<br>
 Overall, this project demonstrates the integration of data preprocessing, aggregation, and interactive visualization techniques to build a dynamic dashboard that supports business insights and decision-making.
 
 
